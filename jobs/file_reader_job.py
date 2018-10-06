@@ -2,7 +2,7 @@ import logging
 import os
 from queue import Queue
 
-from test.jobs.abstract_job import AbstractJob
+from jobs.abstract_job import AbstractJob
 
 logger = logging.getLogger(__name__)
 
