@@ -1,3 +1,7 @@
+from functools import total_ordering
+
+
+@total_ordering
 class Log:
     def __init__(self, client_ip=None, user_identifier=None, user_id=None, timestamp=None, method=None, resource=None, protocol=None,
                  status_code=None,
@@ -19,6 +23,9 @@ class Log:
 
     def __str__(self):
         return str(self.__dict__)
+
+    def __lt__(self, other):
+        return self.timestamp < other.timestamp
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__

@@ -1,3 +1,4 @@
+import heapq
 from queue import Queue
 
 from bom.log_parser import LogParser
@@ -5,10 +6,10 @@ from jobs.abstract_job import AbstractJob
 
 
 class LogFormatterJob(AbstractJob):
-    def __init__(self, str_log_input_queue: Queue, bom_log_output_queue: Queue, interval=0.01):
+    def __init__(self, str_log_input_queue: Queue, bom_log_output_queue: list, interval=0.01):
         super().__init__(interval)
         self.__input_queue = str_log_input_queue
         self.__output_queue = bom_log_output_queue
 
     def _iteration(self):
-        self.__output_queue.put(LogParser(self.__input_queue.get()).parse())
+        heapq.heappush(self.__output_queue, LogParser(self.__input_queue.get()).parse())
