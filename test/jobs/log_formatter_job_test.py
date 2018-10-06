@@ -1,6 +1,6 @@
+import datetime
 from queue import Queue
 
-from bom.log import Log
 from jobs.log_formatter_job import LogFormatterJob
 
 
@@ -18,12 +18,14 @@ def test_log_formats_correspondent_queue():
     a_formatter = LogFormatterJob(str_log_queue, bom_log_queue)
     a_formatter.loop(blocking=False)
     a_formatter.loop(blocking=False)
-    a_log, b_log, c_log = Log(), Log(), Log()
-    a_log.section = "report"
-    b_log.section = "personal"
-    c_log.section = "api"
-    assert bom_log_queue.get() == a_log
-    assert bom_log_queue.get() == b_log
+    log_1 = bom_log_queue.get()
+    log_2 = bom_log_queue.get()
+    assert log_1.resource == "/report"
+    assert log_1.timestamp == datetime.datetime(2018, 5, 9, 16, 0, 50, tzinfo=datetime.timezone.utc)
+    assert log_2.resource == "/personal/create"
+    assert log_2.client_ip == "127.0.0.1"
 
     a_formatter.loop(blocking=False)
-    assert bom_log_queue.get() == c_log
+    log_3 = bom_log_queue.get()
+    assert log_3.resource == "/api"
+    assert log_3.method == "GET"

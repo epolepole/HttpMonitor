@@ -1,6 +1,6 @@
 from queue import Queue
 
-from bom.log_builder import LogBuilder
+from bom.log_parser import LogParser
 from jobs.abstract_job import AbstractJob
 
 
@@ -11,4 +11,4 @@ class LogFormatterJob(AbstractJob):
         self.__output_queue = bom_log_output_queue
 
     def _iteration(self):
-        self.__output_queue.put(LogBuilder(self.__input_queue.get()).get_log())
+        self.__output_queue.put(LogParser(self.__input_queue.get()).parse())
