@@ -19,14 +19,15 @@ def test_watcher_triggers_callback():
 
     open(log_file_path, 'a').write("log line 1\n")
     a_log_watcher.loop(blocking=False)
+    assert output_queue.get() == "log line 1"
+
     open(log_file_path, 'a').write("log line 2\n")
     a_log_watcher.loop(blocking=False)
+    assert output_queue.get() == "log line 2"
+
     open(log_file_path, 'a').write("log line 3\n")
     open(log_file_path, 'a').write("log line 4\n")
     a_log_watcher.loop(blocking=False)
-
-    assert output_queue.get() == "log line 1"
-    assert output_queue.get() == "log line 2"
     assert output_queue.get() == "log line 3"
     assert output_queue.get() == "log line 4"
 

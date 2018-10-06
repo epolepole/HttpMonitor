@@ -18,8 +18,7 @@ class Log:
 
     @property
     def second(self):
-        second_precision = self.timestamp
-        return second_precision.replace(microsecond=0)
+        return int(self.timestamp.timestamp())
 
     def __str__(self):
         return str(self.__dict__)
