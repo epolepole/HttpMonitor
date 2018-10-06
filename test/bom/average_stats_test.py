@@ -6,10 +6,9 @@ def test_average_is_calculated():
     average_stats.increment_trx_at(24)
     average_stats.increment_trx_at(24)
     average_stats.increment_trx_at(25)
-    assert average_stats.trx_avg.get() == 2 / 3
+    assert average_stats.get() == (2 / 3, 24)
     average_stats.increment_trx_at(26)
-    assert average_stats.trx_avg.get() == 1
-    assert average_stats.trx_avg.empty() is True
+    assert average_stats.get() == (1, 25)
 
 
 def test_trx_is_cleaned():
