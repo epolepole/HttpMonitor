@@ -6,11 +6,10 @@ class MaxAvgTransactionsAlert(AbstractJob):
     alarm_active_text = "High traffic generated an alert - hits = {value}, triggered at {time}"
     alarm_recovered_text = "High traffic generated alert recovered at {time}"
 
-    def __init__(self, time_frame, threshold, average_stats_queue: AverageStats, callback, interval=0.8):
+    def __init__(self, threshold, average_stats_queue: AverageStats, callback, interval=0.8):
         super().__init__(interval)
         self.__avg_stats_queue = average_stats_queue
         self.__callback = callback
-        self.__time_frame = time_frame
         self.__threshold = threshold
         self.__is_active = False
 
