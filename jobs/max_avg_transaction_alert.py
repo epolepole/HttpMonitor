@@ -28,5 +28,6 @@ class MaxAvgTransactionsAlert(AbstractJob):
                 logger.debug(MaxAvgTransactionsAlert.alarm_active_text.format(value=int(avg), time=iso_time))
                 self.__callback(MaxAvgTransactionsAlert.alarm_active_text.format(value=int(avg), time=iso_time))
             elif self.__is_active and avg < self.__threshold:
+                self.__is_active = False
                 logger.debug(MaxAvgTransactionsAlert.alarm_recovered_text.format(time=iso_time))
                 self.__callback(MaxAvgTransactionsAlert.alarm_recovered_text.format(time=iso_time))
