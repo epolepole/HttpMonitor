@@ -1,10 +1,11 @@
+import copy
 import datetime
 import logging
 from queue import PriorityQueue
 
 from bom.basic_stats import BasicStats
 from bom.log import Log
-from processors.abstract_stats_processor import AbstractStatsProcessor
+from monitors.processors.abstract_stats_processor import AbstractStatsProcessor
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +19,7 @@ class BasicStatsProcessor(AbstractStatsProcessor):
         self.__aggregated_data.reset(self.__current_time)
 
     def process_log(self, log: Log):
+        logger.debug("Adding log")
         self.__put_if_period_passed()
         self.__aggregated_data.trx_per_resource[log.resource] += 1
         self.__aggregated_data.trx_per_user[log.user_id] += 1
@@ -30,5 +32,5 @@ class BasicStatsProcessor(AbstractStatsProcessor):
         if now - self.__current_time > datetime.timedelta(seconds=self.__time_period):
             logger.debug("Pushing basic stats")
             self.__current_time = now
-            self.__basic_stats_pqueue.put(self.__aggregated_data)
+            self.__basic_stats_pqueue.put(copy.deepcopy(self.__aggregated_data))
             self.__aggregated_data.reset(self.__current_time)

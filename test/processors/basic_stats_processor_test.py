@@ -4,7 +4,7 @@ from queue import PriorityQueue
 
 from bom.log import Log
 from common import logger_configuration
-from processors.basic_stats_processor import BasicStatsProcessor
+from monitors.processors.basic_stats_processor import BasicStatsProcessor
 
 logger_configuration.configure_logging(log_to_stdout=True, is_debug=True)
 logger = logging.getLogger(__name__)

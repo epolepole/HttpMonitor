@@ -1,8 +1,8 @@
 from queue import PriorityQueue
 
-from jobs.basic_stats_job import BasicStatsJob
 from monitors.abstract_monitor_bundle import AbstractMonitorBundle
-from processors.basic_stats_processor import BasicStatsProcessor
+from monitors.monitor_jobs.basic_stats_job import BasicStatsJob
+from monitors.processors.basic_stats_processor import BasicStatsProcessor
 
 
 class BasicStatsBundle(AbstractMonitorBundle):

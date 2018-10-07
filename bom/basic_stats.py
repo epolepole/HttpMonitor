@@ -1,5 +1,8 @@
+import logging
 from collections.__init__ import defaultdict
 from functools import total_ordering
+
+logger = logging.getLogger(__name__)
 
 
 @total_ordering
@@ -19,6 +22,7 @@ class BasicStats:
         return self.timestamp < other.timestamp
 
     def reset(self, timestamp):
+        logger.debug("Resetting basic data")
         self.timestamp = timestamp
         self.trx_per_resource = defaultdict(int)
         self.trx_per_user = defaultdict(int)

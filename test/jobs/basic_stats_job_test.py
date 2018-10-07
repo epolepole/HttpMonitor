@@ -4,7 +4,7 @@ from queue import PriorityQueue
 from mock import Mock
 
 from bom.basic_stats import BasicStats
-from jobs.basic_stats_job import BasicStatsJob
+from monitors.monitor_jobs.basic_stats_job import BasicStatsJob
 
 
 def test_basic_info_is_sent_to_the_callback():

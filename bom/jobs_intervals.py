@@ -1,5 +1,5 @@
 class JobsIntervals:
     def __init__(self):
-        self.file_reader = 0.01
-        self.log_formatter = 0.01
-        self.log_processor = 0.01
+        self.file_reader = 0
+        self.log_formatter = 0
+        self.log_processor = 0

@@ -1,8 +1,8 @@
 from queue import PriorityQueue
 
-from jobs.max_avg_transaction_alert import MaxAvgTransactionsAlert
 from monitors.abstract_monitor_bundle import AbstractMonitorBundle
-from processors.avg_stats_processor import AvgStatsProcessor
+from monitors.monitor_jobs.max_avg_transaction_alert import MaxAvgTransactionsAlert
+from monitors.processors.avg_stats_processor import AvgStatsProcessor
 
 
 class AvgAlertBundle(AbstractMonitorBundle):

@@ -2,7 +2,7 @@ from collections.__init__ import defaultdict
 from queue import PriorityQueue
 
 from bom.log import Log
-from processors.abstract_stats_processor import AbstractStatsProcessor
+from monitors.processors.abstract_stats_processor import AbstractStatsProcessor
 
 
 class AvgStatsProcessor(AbstractStatsProcessor):

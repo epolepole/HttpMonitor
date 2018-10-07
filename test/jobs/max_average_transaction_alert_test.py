@@ -3,7 +3,7 @@ from queue import PriorityQueue
 
 from mock import Mock
 
-from jobs.max_avg_transaction_alert import MaxAvgTransactionsAlert
+from monitors.monitor_jobs.max_avg_transaction_alert import MaxAvgTransactionsAlert
 
 
 def test_alert_is_triggered():

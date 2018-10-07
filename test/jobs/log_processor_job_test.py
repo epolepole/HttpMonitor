@@ -3,7 +3,7 @@ from queue import PriorityQueue
 
 from bom.log import Log
 from jobs.log_processor_job import LogProcessorJob
-from processors.avg_stats_processor import AvgStatsProcessor
+from monitors.processors import AvgStatsProcessor
 
 
 def test_process_average():

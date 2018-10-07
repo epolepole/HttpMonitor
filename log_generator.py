@@ -30,7 +30,7 @@ if __name__ == "__main__":
         print("Starting low traffic for 5 seconds")
         while now - old_time < datetime.timedelta(seconds=5):
             now = datetime.datetime.now(pytz.utc)
-            time.sleep(1)
+            time.sleep(0.3)
             write_line(log_file)
         print("Starting high traffic for 5 seconds")
         old_time = now
@@ -42,5 +42,5 @@ if __name__ == "__main__":
         old_time = now
         while True:
             now = datetime.datetime.now(pytz.utc)
-            time.sleep(1)
+            time.sleep(0.3)
             write_line(log_file)
