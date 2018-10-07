@@ -16,4 +16,7 @@ class LogFormatterJob(AbstractJob):
     def _iteration(self):
         while not self.__input_queue.empty():
             # logger.debug("Parsing log")
-            self.__output_queue.put(LogParser(self.__input_queue.get()).parse())
+            try:
+                self.__output_queue.put(LogParser(self.__input_queue.get()).parse())
+            except ValueError as ex:
+                logger.warning(str(ex))
