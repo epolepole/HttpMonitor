@@ -7,7 +7,7 @@ from mock import Mock, call
 from common import logger_configuration
 from http_monitor_builder import HttpMonitorBuilder
 
-logger_configuration.configure_logging("regression_log.log", is_debug=True)
+logger_configuration.configure_logging(log_to_stdout=True, is_debug=True)
 logger = logging.getLogger(__name__)
 
 
@@ -49,11 +49,13 @@ def test_alert_is_triggered():
     with http_monitor_builder.get_monitor():
         write_log_lines(log_file_path)
         time.sleep(1)
+
+    logger.debug("Removing files")
+    if os.path.exists(log_file_path):
+        os.remove(log_file_path)
+
     calls = [
         call("High traffic generated an alert - hits = 3, triggered at 2018-05-09T18:01:01"),
         call("High traffic alert recovered at 2018-05-09T18:01:04")
     ]
     mocked_callback.assert_has_calls(calls)
-    logger.debug("Removing file")
-    if os.path.exists(log_file_path):
-        os.remove(log_file_path)
