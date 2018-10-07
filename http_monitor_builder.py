@@ -1,4 +1,4 @@
-from queue import Queue
+from queue import PriorityQueue, Queue
 
 from bom.jobs_intervals import JobsIntervals
 from http_monitor import HttpMonitor
@@ -14,7 +14,7 @@ class HttpMonitorBuilder(object):
         self.__jobs = []
         # Creating the shared items between jobs
         self.__str_job_queue = Queue()
-        self.__bom_log_pqueue = []
+        self.__bom_log_pqueue = PriorityQueue()
         self.__stats_processors = list()
 
         self.__init_jobs()

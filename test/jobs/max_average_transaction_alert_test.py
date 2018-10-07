@@ -1,4 +1,5 @@
 import datetime
+from queue import PriorityQueue
 
 from mock import Mock
 
@@ -8,11 +9,11 @@ from jobs.max_avg_transaction_alert import MaxAvgTransactionsAlert
 def test_alert_is_triggered():
     mocked_callback = Mock()
     today_epoch = int(datetime.datetime.now().timestamp())
-    avg_stats = [
-        (today_epoch + 0, 1 / 2),
-        (today_epoch + 1, 3 / 2),
-        (today_epoch + 2, 2)
-    ]
+    avg_stats = PriorityQueue()
+    avg_stats.put((today_epoch + 0, 1 / 2))
+    avg_stats.put((today_epoch + 1, 3 / 2))
+    avg_stats.put((today_epoch + 2, 2))
+
     alert_job = MaxAvgTransactionsAlert(2, avg_stats, mocked_callback, 0.1)
     alert_job.loop(blocking=False)
     iso_expected_time = datetime.datetime.fromtimestamp(today_epoch + 2).isoformat('T')
@@ -23,12 +24,11 @@ def test_alert_is_triggered():
 def test_alert_is_turned_off():
     mocked_callback = Mock()
     today_epoch = int(datetime.datetime.now().timestamp())
-    avg_stats = [
-        (today_epoch + 0, 1 / 2),
-        (today_epoch + 1, 3 / 2),
-        (today_epoch + 2, 2),
-        (today_epoch + 3, 3 / 2)
-    ]
+    avg_stats = PriorityQueue()
+    avg_stats.put((today_epoch + 0, 1 / 2))
+    avg_stats.put((today_epoch + 1, 3 / 2))
+    avg_stats.put((today_epoch + 2, 2))
+    avg_stats.put((today_epoch + 3, 3 / 2))
     alert_job = MaxAvgTransactionsAlert(2, avg_stats, mocked_callback, 0.1)
     alert_job.loop(blocking=False)
     iso_expected_time = datetime.datetime.fromtimestamp(today_epoch + 3).isoformat('T')

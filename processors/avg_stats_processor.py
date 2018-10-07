@@ -1,12 +1,12 @@
-import heapq
 from collections.__init__ import defaultdict
+from queue import PriorityQueue
 
 from bom.log import Log
 from processors.abstract_stats_processor import AbstractStatsProcessor
 
 
 class AvgStatsProcessor(AbstractStatsProcessor):
-    def __init__(self, average_stats_pqueue: list, time_period):
+    def __init__(self, average_stats_pqueue: PriorityQueue, time_period):
         self.__avg_stats_queue = average_stats_pqueue
         self.__time_period = time_period
 
@@ -20,7 +20,7 @@ class AvgStatsProcessor(AbstractStatsProcessor):
         sum_cumulative = sum([self.__trx_per_sec[last_second - delta] for delta in range(0, self.__time_period)])
         if last_second - self.__time_period + 1 in self.__trx_per_sec:
             del self.__trx_per_sec[last_second - self.__time_period + 1]
-        heapq.heappush(self.__avg_stats_queue, (last_second, sum_cumulative / self.__time_period))
+        self.__avg_stats_queue.put((last_second, sum_cumulative / self.__time_period))
 
     def __increment_trx_at(self, second):
         self.__trx_per_sec[second] += 1

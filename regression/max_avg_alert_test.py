@@ -37,7 +37,7 @@ def test_alert_is_triggered_and_released():
     frequencies = [2, 4, 4, 3, 2, 1]
     with http_monitor_builder.get_monitor():
         write_log_lines(log_file_path, frequencies)
-        time.sleep(1)
+        time.sleep(0.5)
 
     logger.debug("Removing files")
     if os.path.exists(log_file_path):
@@ -64,7 +64,7 @@ def test_two_different_alarms_are_triggered():
 
     with http_monitor_builder.get_monitor():
         write_log_lines(log_file_path, frequencies)
-        time.sleep(2)
+        time.sleep(0.5)
 
     logger.debug("Removing files")
     if os.path.exists(log_file_path):
