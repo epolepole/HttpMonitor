@@ -2,10 +2,10 @@ import heapq
 from collections.__init__ import defaultdict
 
 from bom.log import Log
-from calculators.abstract_stats_calculator import AbstractStatsCalculator
+from processors.abstract_stats_processor import AbstractStatsProcessor
 
 
-class AvgStatsCalculator(AbstractStatsCalculator):
+class AvgStatsProcessor(AbstractStatsProcessor):
     def __init__(self, average_stats_pqueue: list, time_period):
         self.__avg_stats_queue = average_stats_pqueue
         self.__time_period = time_period

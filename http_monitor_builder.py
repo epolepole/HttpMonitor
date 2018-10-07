@@ -15,17 +15,17 @@ class HttpMonitorBuilder(object):
         # Creating the shared items between jobs
         self.__str_job_queue = Queue()
         self.__bom_log_pqueue = []
-        self.__stats_calculators = list()
+        self.__stats_processors = list()
 
         self.__init_jobs()
 
     def __init_jobs(self):
         self.__jobs.append(FileReaderJob(self._log_file_path, self.__str_job_queue, self.__intervals.file_reader))
         self.__jobs.append(LogFormatterJob(self.__str_job_queue, self.__bom_log_pqueue, self.__intervals.log_formatter))
-        self.__jobs.append(LogProcessorJob(self.__bom_log_pqueue, self.__stats_calculators, self.__intervals.log_processor))
+        self.__jobs.append(LogProcessorJob(self.__bom_log_pqueue, self.__stats_processors, self.__intervals.log_processor))
 
     def add_monitor(self, monitor_bundle):
-        self.__stats_calculators.append(monitor_bundle.calculator)
+        self.__stats_processors.append(monitor_bundle.processor)
         self.__jobs.append(monitor_bundle.job)
 
     def get_monitor(self):

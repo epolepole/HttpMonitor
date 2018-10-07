@@ -2,8 +2,8 @@ import datetime
 import heapq
 
 from bom.log import Log
-from calculators.avg_stats_calculator import AvgStatsCalculator
 from jobs.log_processor_job import LogProcessorJob
+from processors.avg_stats_processor import AvgStatsProcessor
 
 
 def test_process_average():
@@ -15,7 +15,7 @@ def test_process_average():
     ]
     time_period = 2
     avg_stats_pqueue = []
-    calculators = [AvgStatsCalculator(avg_stats_pqueue, time_period)]
+    calculators = [AvgStatsProcessor(avg_stats_pqueue, time_period)]
     log_processor = LogProcessorJob(bom_log_pq, calculators, 0.1)
     log_processor.loop(blocking=False)
     assert heapq.heappop(avg_stats_pqueue) == (int(datetime.datetime(2018, 5, 9, 16, 0, 50).timestamp()), 1 / 2)

@@ -8,5 +8,5 @@ class AbstractMonitorBundle:
     __metaclass__ = ABCMeta
 
     def __init__(self):
-        self.calculator = None
+        self.processor = None
         self.job = None
