@@ -1,9 +1,12 @@
 import datetime
+import logging
 from queue import PriorityQueue
 
 from bom.basic_stats import BasicStats
 from bom.log import Log
 from processors.abstract_stats_processor import AbstractStatsProcessor
+
+logger = logging.getLogger(__name__)
 
 
 class BasicStatsProcessor(AbstractStatsProcessor):
@@ -20,11 +23,12 @@ class BasicStatsProcessor(AbstractStatsProcessor):
         self.__aggregated_data.trx_per_user[log.user_id] += 1
         self.__aggregated_data.trx_per_method[log.method] += 1
         self.__aggregated_data.trx_per_status[log.status_code] += 1
-        self.__aggregated_data.trx_per_sec += 1 / self.__time_period
+        self.__aggregated_data.trx_per_sec += 1.0 / self.__time_period
 
     def __put_if_period_passed(self):
         now = datetime.datetime.now()
-        if self.__current_time + datetime.timedelta(seconds=self.__time_period) < now:
+        if now - self.__current_time > datetime.timedelta(seconds=self.__time_period):
+            logger.debug("Pushing basic stats")
             self.__current_time = now
             self.__basic_stats_pqueue.put(self.__aggregated_data)
             self.__aggregated_data.reset(self.__current_time)

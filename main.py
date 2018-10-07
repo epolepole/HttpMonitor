@@ -3,7 +3,6 @@ import time
 
 from common import logger_configuration
 from http_monitor_builder import HttpMonitorBuilder
-from monitors.avg_alert_bundle import AvgAlertBundle
 from monitors.basic_stats_bundle import BasicStatsBundle
 
 logger_configuration.configure_logging(log_to_stdout=True, is_debug=False)
@@ -16,8 +15,8 @@ def print_callback(data):
 
 def main():
     http_monitor_builder = HttpMonitorBuilder("tmp_log.log")
-    avg_alert_bundle = AvgAlertBundle(30, 2, print_callback)
-    http_monitor_builder.add_monitor(avg_alert_bundle)
+    # avg_alert_bundle = AvgAlertBundle(30, 2, print_callback)
+    # http_monitor_builder.add_monitor(avg_alert_bundle)
     basic_stats_bundle = BasicStatsBundle(1, print_callback)
     http_monitor_builder.add_monitor(basic_stats_bundle)
 

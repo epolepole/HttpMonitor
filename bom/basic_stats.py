@@ -10,7 +10,7 @@ class BasicStats:
         self.trx_per_user = defaultdict(int)
         self.trx_per_method = defaultdict(int)
         self.trx_per_status = defaultdict(int)
-        self.trx_per_sec = 0
+        self.trx_per_sec = 0.0
 
     def __eq__(self, other):
         return self.timestamp == other.timestamp
@@ -24,4 +24,4 @@ class BasicStats:
         self.trx_per_user = defaultdict(int)
         self.trx_per_method = defaultdict(int)
         self.trx_per_status = defaultdict(int)
-        self.trx_per_sec = 0
+        self.trx_per_sec = 0.0
