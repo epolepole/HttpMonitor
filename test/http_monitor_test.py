@@ -5,7 +5,7 @@ from common import logger_configuration
 from http_monitor import HttpMonitor
 from jobs.abstract_job import AbstractJob
 
-logger_configuration.configure_logging("http_monitor_test.log", is_debug=True)
+logger_configuration.configure_logging(log_to_stdout=True, is_debug=True)
 logger = logging.getLogger(__name__)
 
 

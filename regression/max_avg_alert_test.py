@@ -6,6 +6,7 @@ from mock import Mock, call
 
 from common import logger_configuration
 from http_monitor_builder import HttpMonitorBuilder
+from monitors.avg_alert_bundle import AvgAlertBundle
 
 logger_configuration.configure_logging(log_to_stdout=True, is_debug=True)
 logger = logging.getLogger(__name__)
@@ -45,7 +46,8 @@ def test_alert_is_triggered():
     init_file(log_file_path)
     http_monitor_builder = HttpMonitorBuilder(log_file_path)
     mocked_callback = Mock()
-    http_monitor_builder.add_avg_alert(2, 3, mocked_callback)
+    avg_alert_bundle = AvgAlertBundle(3, 2, mocked_callback)
+    http_monitor_builder.add_monitor(avg_alert_bundle)
     with http_monitor_builder.get_monitor():
         write_log_lines(log_file_path)
         time.sleep(1)
