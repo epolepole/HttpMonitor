@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 class AbstractJob(threading.Thread):
     __metaclass__ = ABCMeta
 
-    def __init__(self, interval=0.5):
+    def __init__(self, interval):
         super().__init__()
         self.__interval = interval
         self.__running = False

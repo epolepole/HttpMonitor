@@ -16,7 +16,7 @@ def create_basic_log_queue():
 def test_log_formats_correspondent_queue():
     str_log_queue = create_basic_log_queue()
     bom_log_queue = []
-    a_formatter = LogFormatterJob(str_log_queue, bom_log_queue)
+    a_formatter = LogFormatterJob(str_log_queue, bom_log_queue, 0.1)
     a_formatter.loop(blocking=False)
     a_formatter.loop(blocking=False)
     log_1 = heappop(bom_log_queue)
@@ -35,7 +35,7 @@ def test_log_formats_correspondent_queue():
 def test_logs_are_added_prioritized_based_on_timestamp():
     str_log_queue = create_basic_log_queue()
     bom_log_queue = []
-    a_formatter = LogFormatterJob(str_log_queue, bom_log_queue)
+    a_formatter = LogFormatterJob(str_log_queue, bom_log_queue, 0.1)
     a_formatter.loop(blocking=False)
     a_formatter.loop(blocking=False)
     a_formatter.loop(blocking=False)

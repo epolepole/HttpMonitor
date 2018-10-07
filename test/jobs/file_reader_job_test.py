@@ -14,7 +14,7 @@ def test_file_reader_fills_queue():
     log_file_path = "./tmp.log"
 
     open(log_file_path, 'a').write("Testing line\n")
-    a_file_reader_job = FileReaderJob(log_file_path, output_queue)
+    a_file_reader_job = FileReaderJob(log_file_path, output_queue, 0.1)
     a_file_reader_job.setup()
 
     open(log_file_path, 'a').write("log line 1\n")
@@ -41,5 +41,5 @@ def test_file_reader_fills_queue():
 def test_error_when_creating_watcher_from_non_existing_file():
     nonexistent_file_path = "./this/file/doesnt.exist"
     with pytest.raises(IOError):
-        a_log_watcher = FileReaderJob(nonexistent_file_path, Queue())
+        a_log_watcher = FileReaderJob(nonexistent_file_path, Queue(), 0.1)
         a_log_watcher.setup()
