@@ -1,8 +1,19 @@
 # HttpLogMonitor
-## Description
-HTTP log monitoring console program
+HTTP log monitoring console program. This monitoring tool will monitor a log file with common log format.
+It will print some statistics related to the logs in json format. It will print the timestamp, the transactions per second, the most hit resources, the most active users and the number of status returned per category:
+```json
+{"time": "2018-10-08T23:36:08.331543", "tps": 15773.0, "most_hits": ["/users", "/statistics", "/api"], "most_active_users": ["Alan", "Thom", "Clara"], "status_codes": {"2xx": 5599, "3xx": 4465, "4xx": 13668
+, "5xx": 6160}}
+```
 
-This monitoring tool will monitor file (defaulted to /var/log/access.log).
+
+And traffic alerts can be configured to show when the traffic goes over a certain threshold for a certain period of time. Displayed as:
+```
+High traffic generated an alert - hits = 3193, triggered at 2018-10-08T23:28:49
+High traffic alert recovered at 2018-10-08T23:28:53
+```
+Several alarms can be configured at the same time
+
 
 ### Display options
 The output of the script can be send to 3 different streams:
@@ -29,7 +40,6 @@ cd /path/to/app
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python -m pytest
 ```
 ### Unit tests
 The folder regression contains a test for the alert mechanism
@@ -46,4 +56,5 @@ Deploy application in another window and check that logs are printed and alert i
 python main.py -f logs/access.log
 ```
 
+## Application Design
 

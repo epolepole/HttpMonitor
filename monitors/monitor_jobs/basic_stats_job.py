@@ -3,8 +3,6 @@ from queue import PriorityQueue, Queue
 from bom.basic_stats import BasicStats
 from jobs.abstract_job import AbstractJob
 
-DEFAULT_STATS = "time {}: Stats: {}"
-
 
 class BasicStatsJob(AbstractJob):
     def __init__(self, basic_info_queue: PriorityQueue, callback, interval, ex_queue=Queue()):
@@ -34,7 +32,7 @@ class BasicStatsJob(AbstractJob):
     def _process_stat(self, basic_stats: BasicStats):
         to_return = dict()
         to_return["time"] = basic_stats.timestamp.isoformat('T')
-        to_return["tps"] = basic_stats.trx_per_sec
+        to_return["transactions_per_second"] = basic_stats.trx_per_sec
         to_return["most_hits"] = list([k for k in sorted(basic_stats.trx_per_resource, key=basic_stats.trx_per_resource.get, reverse=True)])[0:3]
         to_return["most_active_users"] = list([k for k in sorted(basic_stats.trx_per_user, key=basic_stats.trx_per_user.get, reverse=True)])[0:3]
         to_return["status_codes"] = self.__aggreagate_status_codes(basic_stats.trx_per_status)

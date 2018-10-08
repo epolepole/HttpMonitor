@@ -1,3 +1,5 @@
+import json
+
 from displayers.abstract_displayer import AbstractDisplayer
 
 
@@ -7,4 +9,4 @@ class FileAbstractDisplayer(AbstractDisplayer):
 
     def display(self, data):
         with open(self.__file_name, 'a') as file:
-            file.write("{}\n".format(str(data)))
+            file.write("{}\n".format(json.dumps(data)))
