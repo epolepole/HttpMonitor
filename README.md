@@ -67,7 +67,7 @@ The monitoring reads the processed data and outputs the relevant information thr
 
 The following image illustrates schematically the current application structure following the event queues design:
 
-![alt text](http_monitor_schema.jpg)
+![alt text](http_monitor_design.jpg)
 
 ## Installation
 ```bash
