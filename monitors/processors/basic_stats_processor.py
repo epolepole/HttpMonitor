@@ -19,7 +19,6 @@ class BasicStatsProcessor(AbstractStatsProcessor):
         self.__aggregated_data.reset(self.__current_time)
 
     def process_log(self, log: Log):
-        logger.debug("Adding log")
         self.__put_if_period_passed()
         self.__aggregated_data.trx_per_resource[log.resource] += 1
         self.__aggregated_data.trx_per_user[log.user_id] += 1
