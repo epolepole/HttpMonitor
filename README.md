@@ -16,7 +16,40 @@ Several alarms can be configured at the same time. See configuration section for
 The output can be send to 3 different streams: stdout, as log output or to a file.
 
 ## Configuration
+The script main.py can be run with:
+```bash
+main.py -f <path to file to monitor> -c <path to config file>
+```
 
+
+The file config.cfg contains the current application configuration. All the possibilities can be seen in the config_template.cfg file. 
+config.ini Example:
+```ini
+[Stats]
+# Time interval at which basic transaction stats will be shown. If less than 0 or not specified no status will be printed
+interval = 10
+[Alerts]
+# Every alert is a line, with the max avg threshold and the time interval
+# alert_name = <Threshold> <Time Interval In Seconds>
+alert_1 = 30, 120
+alert_2 = 100, 20
+[Output]
+# Displayer options are: stdout, log, file
+displayer = stdout
+# filename if file option is used
+# file_name = output_filename.txt
+[Logging]
+# Debugging logs.
+debug = False
+# Log directly to stdout.
+log_to_stdout = False
+# Log to file. If commented no logs will be stored
+log_to_file = http_monitor.log
+```
+
+Config file can be also modified before running ```docker build``` so that there is no need to mount the confing file when running the img.
+
+If a different config file needs to be used, it can be mounted when running the docker img as described on the installation step.
 
 
 ## Application Design
@@ -41,8 +74,8 @@ The following image illustrates schematically the current application structure 
 # Building image
 docker build -t http_monitor .
 
-# Deploying 
-docker run -it --rm -v /path/to/log/folder:/var/log:ro http_monitor
+# Deploying. Volume for config is optional, in case different configuration is required
+docker run -it --rm -v /path/to/log/folder:/var/log:ro -v /path/to/config/file.cfg:/usr/src/config.cfg:ro http_monitor
 ```
 
 
