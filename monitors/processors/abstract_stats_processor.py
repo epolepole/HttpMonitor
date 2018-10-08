@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from bom.log import Log
+from common.bom.log import Log
 
 
 class AbstractStatsProcessor:

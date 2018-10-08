@@ -1,8 +1,8 @@
 from queue import PriorityQueue, Queue
 
 from monitors.abstract_monitor_bundle import AbstractMonitorBundle
-from monitors.monitor_jobs.basic_stats_job import BasicStatsJob
 from monitors.processors.basic_stats_processor import BasicStatsProcessor
+from workers.basic_stats_worker import BasicStatsWorker
 
 
 class BasicStatsBundle(AbstractMonitorBundle):
@@ -15,5 +15,5 @@ class BasicStatsBundle(AbstractMonitorBundle):
     def get_processor(self):
         return BasicStatsProcessor(self.__basic_stats_pqueue, self.__time_period)
 
-    def get_job(self, ex_queue: Queue):
-        return BasicStatsJob(self.__basic_stats_pqueue, self.__callback, self.__interval, ex_queue)
+    def get_worker(self, exception_queue: Queue):
+        return BasicStatsWorker(self.__basic_stats_pqueue, self.__callback, self.__interval, exception_queue)

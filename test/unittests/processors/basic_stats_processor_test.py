@@ -2,8 +2,8 @@ import logging
 import time
 from queue import PriorityQueue
 
-from bom.log import Log
 from common import logger_configuration
+from common.bom.log import Log
 from monitors.processors.basic_stats_processor import BasicStatsProcessor
 
 logger_configuration.configure_logging(log_to_stdout=True, is_debug=True)

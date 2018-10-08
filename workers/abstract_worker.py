@@ -15,13 +15,13 @@ class StoppingException(Exception):
         return "Stopping exception from {}".format(self.__msg)
 
 
-class AbstractJob(threading.Thread):
+class AbstractWorker(threading.Thread):
     __metaclass__ = ABCMeta
 
     def __init__(self, interval, exception_queue):
         super().__init__()
         self.__interval = interval
-        self.__ex_queue = exception_queue
+        self.__exception_queue = exception_queue
         self.__running = False
         self._queue_timeout = 0.05
 
@@ -36,13 +36,13 @@ class AbstractJob(threading.Thread):
         raise NotImplemented("This method should be overridden")
 
     def run(self):
-        logger.debug("Starting {} job".format(type(self).__name__))
+        logger.debug("Starting {} worker".format(type(self).__name__))
         try:
             self.setup()
             self.loop()
         except Exception as ex:
             logger.error(str(ex))
-            self.__ex_queue.put(ex)
+            self.__exception_queue.put(ex)
         finally:
             self.stop()
 
@@ -59,7 +59,7 @@ class AbstractJob(threading.Thread):
 
     def stop(self):
         if self.__running:
-            logger.debug("Stopping {} job".format(type(self).__name__))
+            logger.debug("Stopping {} worker".format(type(self).__name__))
             self.__running = False
             time.sleep(self.__interval + 0.1)
             self.tear_down()

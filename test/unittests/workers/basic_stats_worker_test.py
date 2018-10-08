@@ -3,8 +3,8 @@ from queue import PriorityQueue
 
 from mock import Mock
 
-from bom.basic_stats import BasicStats
-from monitors.monitor_jobs.basic_stats_job import BasicStatsJob
+from common.bom.basic_stats import BasicStats
+from workers.basic_stats_worker import BasicStatsWorker
 
 
 def test_basic_info_is_sent_to_the_callback():
@@ -22,8 +22,8 @@ def test_basic_info_is_sent_to_the_callback():
 
     basic_info.put(basic_stats_1)
 
-    basic_stats_job = BasicStatsJob(basic_info, mocked_callback, 0.1)
-    basic_stats_job._iteration()
+    basic_stats_worker = BasicStatsWorker(basic_info, mocked_callback, 0.1)
+    basic_stats_worker._iteration()
 
     expected_output = {
         "time":                    now.isoformat('T'),

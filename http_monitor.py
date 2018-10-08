@@ -6,35 +6,35 @@ logger = logging.getLogger(__name__)
 
 
 class HttpMonitor:
-    def __init__(self, jobs_list, ex_bucket: Queue):
-        self.__jobs = jobs_list
-        self.__ex_bucket = ex_bucket
+    def __init__(self, workers_list, exception_bucket: Queue):
+        self.__workers = workers_list
+        self.__exception_bucket = exception_bucket
 
-    def start_processes(self, blocking=True):
+    def start_workers(self, blocking=True):
         self.__start()
         if blocking:
             self.__run()
 
     def __start(self):
         logger.debug("Starting start")
-        for job in self.__jobs:
-            job.start()
+        for worker in self.__workers:
+            worker.start()
 
-    def stop_processes(self):
+    def stop_workers(self):
         logger.debug("Calling stop")
-        for job in self.__jobs:
-            job.stop()
-            job.join(3)
+        for worker in self.__workers:
+            worker.stop()
+            worker.join(3)
 
     def __run(self):
         while True:
             try:
-                exc = self.__ex_bucket.get(block=False, timeout=0.1)
+                exc = self.__exception_bucket.get(block=False, timeout=0.1)
             except Empty:
                 pass
             else:
                 logger.error(str(exc))
-                self.stop_processes()
+                self.stop_workers()
                 time.sleep(0.2)
                 raise exc
 
@@ -42,11 +42,11 @@ class HttpMonitor:
                 time.sleep(0.2)
                 continue
             else:
-                self.stop_processes()
+                self.stop_workers()
                 break
 
     def __all_threads_alive(self):
-        for job in self.__jobs:
-            if not job.isAlive():
+        for worker in self.__workers:
+            if not worker.isAlive():
                 return False
         return True

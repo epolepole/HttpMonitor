@@ -1,12 +1,12 @@
 from queue import PriorityQueue, Queue
 
-from bom.basic_stats import BasicStats
-from jobs.abstract_job import AbstractJob
+from common.bom.basic_stats import BasicStats
+from workers.abstract_worker import AbstractWorker
 
 
-class BasicStatsJob(AbstractJob):
-    def __init__(self, basic_info_queue: PriorityQueue, callback, interval, ex_queue=Queue()):
-        super().__init__(interval, ex_queue)
+class BasicStatsWorker(AbstractWorker):
+    def __init__(self, basic_info_queue: PriorityQueue, callback, interval, exception_queue=Queue()):
+        super().__init__(interval, exception_queue)
         self.__callback = callback
         self.__basic_info_pqueue = basic_info_queue
         self.__stats_to_print = dict()

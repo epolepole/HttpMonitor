@@ -1,36 +1,38 @@
 from queue import PriorityQueue, Queue
 
-from bom.jobs_intervals import JobsIntervals
+from common.bom.workers_intervals import WorkersIntervals
 from http_monitor import HttpMonitor
-from jobs.file_reader_job import FileReaderJob
-from jobs.log_formatter_job import LogFormatterJob
-from jobs.log_processor_job import LogProcessorJob
+from workers.file_reader_worker import FileReaderWorker
+from workers.log_formatter_worker import LogFormatterWorker
+from workers.log_processor_worker import LogProcessorWorker
 
 
 class HttpMonitorBuilder(object):
-    def __init__(self, log_file_path, intervals=JobsIntervals()):
+    def __init__(self, log_file_path, intervals=WorkersIntervals()):
         self._log_file_path = log_file_path
         self.__intervals = intervals
-        self.__jobs = []
-        # Creating the shared items between jobs
-        self.__ex_queue = Queue()
-        self.__str_job_queue = Queue()
+        self.__workers = []
+        # Creating the shared items between workers
+        self.__exception_queue = Queue()
+        self.__str_log_queue = Queue()
         self.__bom_log_pqueue = PriorityQueue()
         self.__stats_processors = list()
 
-        self.__init_jobs()
+        self.__init_workers()
 
-    def __init_jobs(self):
-        self.__jobs.append(FileReaderJob(self._log_file_path, self.__str_job_queue, self.__intervals.file_reader, self.__ex_queue))
-        self.__jobs.append(LogFormatterJob(self.__str_job_queue, self.__bom_log_pqueue, self.__intervals.log_formatter, self.__ex_queue))
-        self.__jobs.append(LogProcessorJob(self.__bom_log_pqueue, self.__stats_processors, self.__intervals.log_processor, self.__ex_queue))
+    def __init_workers(self):
+        self.__workers.append(FileReaderWorker(self._log_file_path, self.__str_log_queue, self.__intervals.file_reader, self.__exception_queue))
+        self.__workers.append(
+            LogFormatterWorker(self.__str_log_queue, self.__bom_log_pqueue, self.__intervals.log_formatter, self.__exception_queue))
+        self.__workers.append(
+            LogProcessorWorker(self.__bom_log_pqueue, self.__stats_processors, self.__intervals.log_processor, self.__exception_queue))
 
     def add_monitor(self, monitor_bundle):
         self.__stats_processors.append(monitor_bundle.get_processor())
-        self.__jobs.append(monitor_bundle.get_job(self.__ex_queue))
+        self.__workers.append(monitor_bundle.get_worker(self.__exception_queue))
 
     def get_monitor(self):
-        return HttpMonitor(self.__jobs, self.__ex_queue)
+        return HttpMonitor(self.__workers, self.__exception_queue)
 
     def get_ex_bucket(self):
-        return self.__ex_queue
+        return self.__exception_queue

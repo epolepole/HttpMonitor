@@ -1,7 +1,7 @@
 import datetime
 from queue import PriorityQueue, Queue
 
-from jobs.log_formatter_job import LogFormatterJob
+from workers.log_formatter_worker import LogFormatterWorker
 
 
 def create_basic_log_queue():
@@ -15,7 +15,7 @@ def create_basic_log_queue():
 def test_log_formats_correspondent_queue():
     str_log_queue = create_basic_log_queue()
     bom_log_queue = PriorityQueue()
-    a_formatter = LogFormatterJob(str_log_queue, bom_log_queue, 0.1)
+    a_formatter = LogFormatterWorker(str_log_queue, bom_log_queue, 0.1)
     while not str_log_queue.empty():
         a_formatter._iteration()
     log_1 = bom_log_queue.get()
@@ -32,7 +32,7 @@ def test_log_formats_correspondent_queue():
 def test_logs_are_added_prioritized_based_on_timestamp():
     str_log_queue = create_basic_log_queue()
     bom_log_queue = PriorityQueue()
-    a_formatter = LogFormatterJob(str_log_queue, bom_log_queue, 0.1)
+    a_formatter = LogFormatterWorker(str_log_queue, bom_log_queue, 0.1)
     while not str_log_queue.empty():
         a_formatter._iteration()
     assert bom_log_queue.get().timestamp == datetime.datetime(2018, 5, 9, 16, 0, 50, tzinfo=datetime.timezone.utc)

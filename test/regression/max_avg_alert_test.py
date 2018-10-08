@@ -2,7 +2,6 @@ import logging
 import os
 import time
 
-import pytest
 from mock import Mock, call
 
 from common import logger_configuration
@@ -40,10 +39,10 @@ def test_two_different_alarms_are_triggered():
     frequencies = [2, 4, 3, 3, 5, 2, 1, 1]
 
     http_monitor = http_monitor_builder.get_monitor()
-    http_monitor.start_processes(blocking=False)
+    http_monitor.start_workers(blocking=False)
     write_log_lines(log_file_path, frequencies)
     time.sleep(1)
-    http_monitor.stop_processes()
+    http_monitor.stop_workers()
 
     logger.debug("Removing files")
     if os.path.exists(log_file_path):
@@ -68,10 +67,10 @@ def test_alert_is_triggered_and_released():
 
     frequencies = [2, 4, 4, 3, 2, 1]
     http_monitor = http_monitor_builder.get_monitor()
-    http_monitor.start_processes(blocking=False)
+    http_monitor.start_workers(blocking=False)
     write_log_lines(log_file_path, frequencies)
     time.sleep(1)
-    http_monitor.stop_processes()
+    http_monitor.stop_workers()
 
     logger.debug("Removing files")
     if os.path.exists(log_file_path):
@@ -82,14 +81,3 @@ def test_alert_is_triggered_and_released():
         call("High traffic alert recovered at 2018-05-09T18:01:04")
     ]
     mocked_callback.assert_has_calls(calls)
-
-
-def test_missing_file_stops_all_threads():
-    log_file_path = "./non_existent_file.log"
-    http_monitor_builder = HttpMonitorBuilder(log_file_path)
-    mocked_callback = Mock()
-    avg_alert_bundle = AvgAlertBundle(3, 2, mocked_callback)
-    http_monitor_builder.add_monitor(avg_alert_bundle)
-    http_monitor = http_monitor_builder.get_monitor()
-    with pytest.raises(IOError):
-        http_monitor.start_processes()

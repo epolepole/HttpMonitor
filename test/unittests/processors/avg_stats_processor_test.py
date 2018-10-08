@@ -1,7 +1,7 @@
 import datetime
 from queue import PriorityQueue
 
-from bom.log import Log
+from common.bom.log import Log
 from monitors.processors.avg_stats_processor import AvgStatsProcessor
 
 

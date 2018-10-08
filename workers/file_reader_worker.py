@@ -2,14 +2,14 @@ import logging
 import os
 from queue import Queue
 
-from jobs.abstract_job import AbstractJob
+from workers.abstract_worker import AbstractWorker
 
 logger = logging.getLogger(__name__)
 
 
-class FileReaderJob(AbstractJob):
-    def __init__(self, log_file_path, output_queue: Queue, interval, ex_queue=Queue()):
-        super().__init__(interval, ex_queue)
+class FileReaderWorker(AbstractWorker):
+    def __init__(self, log_file_path, output_queue: Queue, interval, exception_queue=Queue()):
+        super().__init__(interval, exception_queue)
         self.__file_path = os.path.realpath(log_file_path)
         self.__file = None
         self.__output_queue = output_queue

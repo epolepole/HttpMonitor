@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-from bom.log_parser import LOG_TIMESTAMP_FORMAT, LogParser
+from common.bom.log_parser import LOG_TIMESTAMP_FORMAT, LogParser
 
 
 def test_create_simple_bom_log():

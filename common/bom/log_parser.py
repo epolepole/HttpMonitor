@@ -1,7 +1,7 @@
 import datetime
 import re
 
-from bom.log import Log
+from common.bom.log import Log
 
 # '127.0.0.1 - jill [09/May/2018:16:00:41 +0000] "GET /api/user HTTP/1.0" 200 1234'
 """

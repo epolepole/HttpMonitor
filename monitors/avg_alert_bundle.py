@@ -1,8 +1,8 @@
 from queue import PriorityQueue, Queue
 
 from monitors.abstract_monitor_bundle import AbstractMonitorBundle
-from monitors.monitor_jobs.max_avg_transaction_alert import MaxAvgTransactionsAlert
 from monitors.processors.avg_stats_processor import AvgStatsProcessor
+from workers.max_avg_transaction_worker import MaxAvgTransactionsAlertWorker
 
 
 class AvgAlertBundle(AbstractMonitorBundle):
@@ -16,6 +16,6 @@ class AvgAlertBundle(AbstractMonitorBundle):
     def get_processor(self):
         return AvgStatsProcessor(self.__average_stats_pqueue, self.__time_period)
 
-    def get_job(self, ex_queue: Queue):
-        return MaxAvgTransactionsAlert(self.__threshold, self.__average_stats_pqueue, self.__callback, self.__interval,
-                                       ex_queue)
+    def get_worker(self, exception_queue: Queue):
+        return MaxAvgTransactionsAlertWorker(self.__threshold, self.__average_stats_pqueue, self.__callback, self.__interval,
+                                             exception_queue)
