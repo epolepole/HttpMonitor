@@ -1,5 +1,5 @@
 import datetime
-from queue import PriorityQueue, Queue
+from queue import PriorityQueue
 
 from mock import Mock
 
@@ -26,10 +26,10 @@ def test_basic_info_is_sent_to_the_callback():
     basic_stats_job._iteration()
 
     expected_output = {
-        "time":              now.isoformat('T'),
-        "tps":               15,
-        "most_hits":         ["/path_d", "/path_c", "/path_b"],
-        "most_active_users": ["user_b", "user_c", "user_d"],
-        "status_codes":      {"2xx": 5, "3xx": 0, "4xx": 2, "5xx": 3}
+        "time":                    now.isoformat('T'),
+        "transactions_per_second": 15,
+        "most_hits":               ["/path_d", "/path_c", "/path_b"],
+        "most_active_users":       ["user_b", "user_c", "user_d"],
+        "status_codes":            {"2xx": 5, "3xx": 0, "4xx": 2, "5xx": 3}
     }
     mocked_callback.assert_called_once_with(expected_output)
