@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import logging
+import sys
 
 from common import configuration_reader
 from common.configuration_reader import Options
@@ -27,6 +28,7 @@ def main():
 
     http_monitor_builder = HttpMonitorBuilder(opts.log_file_path)
 
+    logger.info("Watching file {}".format(line_args.file_to_monitor))
     for alert_param in opts.alert_parameters:
         logger.info("Alert when traffic over {} for at least {} seconds".format(alert_param[0], alert_param[1]))
         avg_alert_bundle = AvgAlertBundle(alert_param[0], alert_param[1], displayer.display)
@@ -37,7 +39,19 @@ def main():
         basic_stats_bundle = BasicStatsBundle(opts.stats_interval, displayer.display)
         http_monitor_builder.add_monitor(basic_stats_bundle)
 
-    http_monitor_builder.get_monitor().start()
+    http_monitor = http_monitor_builder.get_monitor()
+
+    return_code = 0
+    try:
+        http_monitor.start_processes()
+    except KeyboardInterrupt or SystemExit:
+        logger.info("Kill signal received")
+    except Exception as ex:
+        logger.error(str(ex))
+        return_code = 1
+    finally:
+        http_monitor.stop_processes()
+        sys.exit(return_code)
 
 
 if __name__ == "__main__":

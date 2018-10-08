@@ -25,11 +25,11 @@ def write_line(log_file):
 
 
 if __name__ == "__main__":
-    with open("tmp_log.log", 'a') as log_file:
+    with open("logs/access.log", 'a') as log_file:
         old_time = datetime.datetime.now(pytz.utc)
         now = old_time
-        print("Starting low traffic for 5 seconds")
-        while now - old_time < datetime.timedelta(seconds=5):
+        print("Starting low traffic for 10 seconds")
+        while now - old_time < datetime.timedelta(seconds=10):
             now = datetime.datetime.now(pytz.utc)
             time.sleep(0.3)
             write_line(log_file)
@@ -43,5 +43,5 @@ if __name__ == "__main__":
         old_time = now
         while True:
             now = datetime.datetime.now(pytz.utc)
-            time.sleep(0.3)
+            time.sleep(0.02)
             write_line(log_file)

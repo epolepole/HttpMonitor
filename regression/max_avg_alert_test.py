@@ -40,10 +40,10 @@ def test_two_different_alarms_are_triggered():
     frequencies = [2, 4, 3, 3, 5, 2, 1, 1]
 
     http_monitor = http_monitor_builder.get_monitor()
-    http_monitor.start(blocking=False)
+    http_monitor.start_processes(blocking=False)
     write_log_lines(log_file_path, frequencies)
     time.sleep(1)
-    http_monitor.stop()
+    http_monitor.stop_processes()
 
     logger.debug("Removing files")
     if os.path.exists(log_file_path):
@@ -68,10 +68,10 @@ def test_alert_is_triggered_and_released():
 
     frequencies = [2, 4, 4, 3, 2, 1]
     http_monitor = http_monitor_builder.get_monitor()
-    http_monitor.start(blocking=False)
+    http_monitor.start_processes(blocking=False)
     write_log_lines(log_file_path, frequencies)
     time.sleep(1)
-    http_monitor.stop()
+    http_monitor.stop_processes()
 
     logger.debug("Removing files")
     if os.path.exists(log_file_path):
@@ -92,4 +92,4 @@ def test_missing_file_stops_all_threads():
     http_monitor_builder.add_monitor(avg_alert_bundle)
     http_monitor = http_monitor_builder.get_monitor()
     with pytest.raises(IOError):
-        http_monitor.start()
+        http_monitor.start_processes()
