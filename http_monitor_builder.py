@@ -21,6 +21,7 @@ class HttpMonitorBuilder(object):
         self.__init_workers()
 
     def __init_workers(self):
+        """Initialize the Basic workers and add the correspondent shared queues and the shared exception queue"""
         self.__workers.append(FileReaderWorker(self._log_file_path, self.__str_log_queue, self.__intervals.file_reader, self.__exception_queue))
         self.__workers.append(
             LogFormatterWorker(self.__str_log_queue, self.__bom_log_pqueue, self.__intervals.log_formatter, self.__exception_queue))
@@ -28,6 +29,7 @@ class HttpMonitorBuilder(object):
             LogProcessorWorker(self.__bom_log_pqueue, self.__stats_processors, self.__intervals.log_processor, self.__exception_queue))
 
     def add_monitor(self, monitor_bundle):
+        """Initialize the monitors and add the processors tu the processor worker"""
         self.__stats_processors.append(monitor_bundle.get_processor())
         self.__workers.append(monitor_bundle.get_worker(self.__exception_queue))
 

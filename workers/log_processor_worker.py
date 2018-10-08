@@ -7,6 +7,10 @@ logger = logging.getLogger(__name__)
 
 
 class LogProcessorWorker(AbstractWorker):
+    """
+    This worker will run per log in the input queue the different processors associated in the stats_processors list
+    """
+
     def __init__(self, input_queue: PriorityQueue, stats_processors: list, interval, exception_queue=Queue()):
         super().__init__(interval, exception_queue)
         self.__input_pq = input_queue

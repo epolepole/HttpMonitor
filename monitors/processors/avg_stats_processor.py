@@ -9,6 +9,11 @@ logger = logging.getLogger(__name__)
 
 
 class AvgStatsProcessor(AbstractStatsProcessor):
+    """
+    This log processor, will aggregate the average up to certain amount of time defined in the time_period.
+    Then it will push the value into the output_queue.
+    """
+
     def __init__(self, average_stats_pqueue: PriorityQueue, time_period):
         self.__avg_stats_queue = average_stats_pqueue
         self.__time_period = time_period

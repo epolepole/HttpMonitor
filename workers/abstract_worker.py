@@ -7,14 +7,6 @@ from queue import Empty
 logger = logging.getLogger(__name__)
 
 
-class StoppingException(Exception):
-    def __init__(self, msg):
-        self.__msg = msg
-
-    def __str__(self):
-        return "Stopping exception from {}".format(self.__msg)
-
-
 class AbstractWorker(threading.Thread):
     __metaclass__ = ABCMeta
 
@@ -25,11 +17,14 @@ class AbstractWorker(threading.Thread):
         self.__running = False
         self._queue_timeout = 0.05
 
-    def setup(self):
-        pass
-
-    def tear_down(self):
-        pass
+    def loop(self):
+        self.__running = True
+        while self.__running:
+            try:
+                self._iteration()
+            except Empty:
+                pass
+            time.sleep(self.__interval)
 
     @abstractmethod
     def _iteration(self):
@@ -46,16 +41,11 @@ class AbstractWorker(threading.Thread):
         finally:
             self.stop()
 
-    def loop(self, blocking=True):
-        self.__running = True
-        while self.__running:
-            try:
-                self._iteration()
-            except Empty:
-                pass
-            if not blocking:
-                return
-            time.sleep(self.__interval)
+    def setup(self):
+        pass
+
+    def tear_down(self):
+        pass
 
     def stop(self):
         if self.__running:

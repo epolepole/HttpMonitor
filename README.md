@@ -102,3 +102,12 @@ Deploy application in another window and check that logs are printed and alert i
 python main.py -f logs/access.log
 ```
 
+## Future lines
+1. Use multiprocessing instead of multithreading to bypass the python GIL and be able to take advantage of the full CPU.
+1. An option could be to transform the pipeline into several microservices for the different workers. 
+This way the system can become much more scalable as every worker will become a completely independent service and several workers will be able to run in parallel easily, 
+at least for the file reader and log parser.
+2. Add extra configuration to print different stats, or even make the possibility to create different types of stats monitors
+3. Add different kind of alarms like for low traffic, for ddos attack or for server errors. 
+Also it will be necessary to add labels to the different alarms
+4. Implement an interactive UI to display the application output and to configure its parameters.

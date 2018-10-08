@@ -11,6 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 class BasicStatsProcessor(AbstractStatsProcessor):
+    """
+    This processor will aggregate the available stats per time_period and will write them in the ouput queue
+    """
+
     def __init__(self, basic_stats_pqueue: PriorityQueue, time_period):
         self.__basic_stats_pqueue = basic_stats_pqueue
         self.__time_period = time_period
