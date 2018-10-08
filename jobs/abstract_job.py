@@ -37,30 +37,29 @@ class AbstractJob(threading.Thread):
 
     def run(self):
         logger.debug("Starting {} job".format(type(self).__name__))
-        self.setup()
-        self.loop()
-
-    def loop(self, blocking=True):
-        self.__running = True
         try:
-            while self.__running and self.__ex_queue.empty():
-                try:
-                    self._iteration()
-                except Empty:
-                    pass
-                if not blocking:
-                    return
-                time.sleep(self.__interval)
+            self.setup()
+            self.loop()
         except Exception as ex:
             logger.error(str(ex))
             self.__ex_queue.put(ex)
         finally:
             self.stop()
 
+    def loop(self, blocking=True):
+        self.__running = True
+        while self.__running:
+            try:
+                self._iteration()
+            except Empty:
+                pass
+            if not blocking:
+                return
+            time.sleep(self.__interval)
+
     def stop(self):
         if self.__running:
             logger.debug("Stopping {} job".format(type(self).__name__))
             self.__running = False
-            self.__ex_queue.put(StoppingException(type(self).__name__))
             time.sleep(self.__interval + 0.1)
             self.tear_down()

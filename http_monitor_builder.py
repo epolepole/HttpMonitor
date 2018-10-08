@@ -31,3 +31,6 @@ class HttpMonitorBuilder(object):
 
     def get_monitor(self):
         return HttpMonitor(self.__jobs, self.__ex_queue)
+
+    def get_ex_bucket(self):
+        return self.__ex_queue

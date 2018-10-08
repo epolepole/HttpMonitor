@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import logging
-import time
 
 from common.get_args import get_args
 from common.logger_configuration import configure_logging
@@ -33,9 +32,7 @@ def main():
         basic_stats_bundle = BasicStatsBundle(args.stats_interval, displayer.display)
         http_monitor_builder.add_monitor(basic_stats_bundle)
 
-    with http_monitor_builder.get_monitor():
-        while True:
-            time.sleep(5)
+    http_monitor_builder.get_monitor().start()
 
 
 if __name__ == "__main__":
