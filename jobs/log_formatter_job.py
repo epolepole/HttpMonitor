@@ -8,15 +8,13 @@ logger = logging.getLogger(__name__)
 
 
 class LogFormatterJob(AbstractJob):
-    def __init__(self, str_log_input_queue: Queue, bom_log_output_queue: PriorityQueue, interval):
-        super().__init__(interval)
+    def __init__(self, str_log_input_queue: Queue, bom_log_output_queue: PriorityQueue, interval, ex_queue= Queue()):
+        super().__init__(interval, ex_queue)
         self.__input_queue = str_log_input_queue
         self.__output_queue = bom_log_output_queue
 
     def _iteration(self):
-        while not self.__input_queue.empty():
-            # logger.debug("Parsing log")
-            try:
-                self.__output_queue.put(LogParser(self.__input_queue.get()).parse())
-            except ValueError as ex:
-                logger.warning(str(ex))
+        try:
+            self.__output_queue.put(LogParser(self.__input_queue.get(timeout=self._queue_timeout)).parse())
+        except ValueError as ex:
+            logger.warning(str(ex))

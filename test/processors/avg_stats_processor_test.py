@@ -2,7 +2,7 @@ import datetime
 from queue import PriorityQueue
 
 from bom.log import Log
-from monitors.processors import AvgStatsProcessor
+from monitors.processors.avg_stats_processor import AvgStatsProcessor
 
 
 def test_average_is_calculated():

@@ -2,17 +2,28 @@ import logging
 import threading
 import time
 from abc import ABCMeta, abstractmethod
+from queue import Empty
 
 logger = logging.getLogger(__name__)
+
+
+class StoppingException(Exception):
+    def __init__(self, msg):
+        self.__msg = msg
+
+    def __str__(self):
+        return "Stopping exception from {}".format(self.__msg)
 
 
 class AbstractJob(threading.Thread):
     __metaclass__ = ABCMeta
 
-    def __init__(self, interval):
+    def __init__(self, interval, exception_queue):
         super().__init__()
         self.__interval = interval
+        self.__ex_queue = exception_queue
         self.__running = False
+        self._queue_timeout = 0.05
 
     def setup(self):
         pass
@@ -31,14 +42,25 @@ class AbstractJob(threading.Thread):
 
     def loop(self, blocking=True):
         self.__running = True
-        while self.__running:
-            self._iteration()
-            if not blocking:
-                return
-            time.sleep(self.__interval)
+        try:
+            while self.__running and self.__ex_queue.empty():
+                try:
+                    self._iteration()
+                except Empty:
+                    pass
+                if not blocking:
+                    return
+                time.sleep(self.__interval)
+        except Exception as ex:
+            logger.error(str(ex))
+            self.__ex_queue.put(ex)
+        finally:
+            self.stop()
 
     def stop(self):
-        logger.debug("Stopping {} job".format(type(self).__name__))
-        self.__running = False
-        time.sleep(self.__interval + 0.1)
-        self.tear_down()
+        if self.__running:
+            logger.debug("Stopping {} job".format(type(self).__name__))
+            self.__running = False
+            self.__ex_queue.put(StoppingException(type(self).__name__))
+            time.sleep(self.__interval + 0.1)
+            self.tear_down()

@@ -1,5 +1,6 @@
 import logging
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
+from queue import Queue
 
 logger = logging.getLogger(__name__)
 
@@ -7,6 +8,10 @@ logger = logging.getLogger(__name__)
 class AbstractMonitorBundle:
     __metaclass__ = ABCMeta
 
-    def __init__(self):
-        self.processor = None
-        self.job = None
+    @abstractmethod
+    def get_job(self, ex_queue):
+        raise NotImplemented("This method should be overridden")
+
+    @abstractmethod
+    def get_processor(self):
+        raise NotImplemented("This method should be overridden")

@@ -13,6 +13,7 @@ class HttpMonitorBuilder(object):
         self.__intervals = intervals
         self.__jobs = []
         # Creating the shared items between jobs
+        self.__ex_queue = Queue()
         self.__str_job_queue = Queue()
         self.__bom_log_pqueue = PriorityQueue()
         self.__stats_processors = list()
@@ -20,13 +21,13 @@ class HttpMonitorBuilder(object):
         self.__init_jobs()
 
     def __init_jobs(self):
-        self.__jobs.append(FileReaderJob(self._log_file_path, self.__str_job_queue, self.__intervals.file_reader))
-        self.__jobs.append(LogFormatterJob(self.__str_job_queue, self.__bom_log_pqueue, self.__intervals.log_formatter))
-        self.__jobs.append(LogProcessorJob(self.__bom_log_pqueue, self.__stats_processors, self.__intervals.log_processor))
+        self.__jobs.append(FileReaderJob(self._log_file_path, self.__str_job_queue, self.__intervals.file_reader, self.__ex_queue))
+        self.__jobs.append(LogFormatterJob(self.__str_job_queue, self.__bom_log_pqueue, self.__intervals.log_formatter, self.__ex_queue))
+        self.__jobs.append(LogProcessorJob(self.__bom_log_pqueue, self.__stats_processors, self.__intervals.log_processor, self.__ex_queue))
 
     def add_monitor(self, monitor_bundle):
-        self.__stats_processors.append(monitor_bundle.processor)
-        self.__jobs.append(monitor_bundle.job)
+        self.__stats_processors.append(monitor_bundle.get_processor())
+        self.__jobs.append(monitor_bundle.get_job(self.__ex_queue))
 
     def get_monitor(self):
-        return HttpMonitor(self.__jobs)
+        return HttpMonitor(self.__jobs, self.__ex_queue)

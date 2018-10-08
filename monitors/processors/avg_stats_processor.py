@@ -1,8 +1,11 @@
+import logging
 from collections.__init__ import defaultdict
 from queue import PriorityQueue
 
 from bom.log import Log
 from monitors.processors.abstract_stats_processor import AbstractStatsProcessor
+
+logger = logging.getLogger(__name__)
 
 
 class AvgStatsProcessor(AbstractStatsProcessor):

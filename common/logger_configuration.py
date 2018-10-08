@@ -3,7 +3,7 @@ import sys
 
 
 def configure_logging(is_debug=False, log_file="", log_to_stdout=False):
-    log_formatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s] %(name)s - %(message)s")
+    log_formatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s] %(name)s:%(lineno)s - %(message)s")
     handlers = []
     if log_file != "":
         file_handler = logging.FileHandler(log_file)

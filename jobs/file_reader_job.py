@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 
 
 class FileReaderJob(AbstractJob):
-    def __init__(self, log_file_path, output_queue: Queue, interval):
-        super().__init__(interval)
+    def __init__(self, log_file_path, output_queue: Queue, interval, ex_queue= Queue()):
+        super().__init__(interval, ex_queue)
         self.__file_path = os.path.realpath(log_file_path)
         self.__file = None
         self.__output_queue = output_queue

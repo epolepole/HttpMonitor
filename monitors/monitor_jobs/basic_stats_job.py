@@ -1,4 +1,4 @@
-from queue import PriorityQueue
+from queue import PriorityQueue, Queue
 
 from bom.basic_stats import BasicStats
 from jobs.abstract_job import AbstractJob
@@ -7,8 +7,8 @@ DEFAULT_STATS = "time {}: Stats: {}"
 
 
 class BasicStatsJob(AbstractJob):
-    def __init__(self, basic_info_queue: PriorityQueue, callback, interval):
-        super().__init__(interval)
+    def __init__(self, basic_info_queue: PriorityQueue, callback, interval, ex_queue=Queue()):
+        super().__init__(interval, ex_queue)
         self.__callback = callback
         self.__basic_info_pqueue = basic_info_queue
         self.__stats_to_print = dict()
@@ -41,5 +41,4 @@ class BasicStatsJob(AbstractJob):
         self.__callback(to_return)
 
     def _iteration(self):
-        while not self.__basic_info_pqueue.empty():
-            self._process_stat(self.__basic_info_pqueue.get())
+        self._process_stat(self.__basic_info_pqueue.get(timeout=self._queue_timeout))

@@ -1,5 +1,5 @@
 import datetime
-from queue import PriorityQueue
+from queue import PriorityQueue, Queue
 
 from mock import Mock
 
@@ -23,7 +23,7 @@ def test_basic_info_is_sent_to_the_callback():
     basic_info.put(basic_stats_1)
 
     basic_stats_job = BasicStatsJob(basic_info, mocked_callback, 0.1)
-    basic_stats_job.loop(blocking=False)
+    basic_stats_job._iteration()
 
     expected_output = {
         "time":              now.isoformat('T'),

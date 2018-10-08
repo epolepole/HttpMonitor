@@ -18,16 +18,16 @@ def test_file_reader_fills_queue():
     a_file_reader_job.setup()
 
     open(log_file_path, 'a').write("log line 1\n")
-    a_file_reader_job.loop(blocking=False)
+    a_file_reader_job._iteration()
     assert output_queue.get() == "log line 1"
 
     open(log_file_path, 'a').write("log line 2\n")
-    a_file_reader_job.loop(blocking=False)
+    a_file_reader_job._iteration()
     assert output_queue.get() == "log line 2"
 
     open(log_file_path, 'a').write("log line 3\n")
     open(log_file_path, 'a').write("log line 4\n")
-    a_file_reader_job.loop(blocking=False)
+    a_file_reader_job._iteration()
     assert output_queue.get() == "log line 3"
     assert output_queue.get() == "log line 4"
 
