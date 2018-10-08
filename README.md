@@ -23,10 +23,16 @@ The output can be send to 3 different streams: stdout, as log output or to a fil
 
 The model is based in event queues and threads. Every thread reads from a queue whenever it has items and writes to another queue, that is used by the next thread.
 This model allows good decoupling between the different steps of the application and facilitates de parallelisation of the application for scalability.
-The flow is divided in 4 types of jobs: reading, parsing, processing and monitoring. Reading and parsing simply get the lines from the file and fills a queue with the object representation of a log line.
-Processing is composed of different processors, which in our case includes an average calculator and a stats aggregator. These two processes puts the elements in a queue, that will be read by the monitoring processes.
+
+The flow is divided in 4 types of jobs: reading, parsing, processing and monitoring. 
+
+Reading and parsing simply get the lines from the file and fills a queue with the object representation of a log line.
+
+Processing is composed of different processors, which in our case include an average calculator and a stats aggregator. These two processes puts the elements in a queue, that will be read by the monitoring processes.
+
 The monitoring reads the processed data and outputs the relevant information through the desired stream. In this application the monitors are the max transaction alert and the stats displayer.
-The following image illustrates schematically the current application structure following the event queues design.
+
+The following image illustrates schematically the current application structure following the event queues design:
 
 ![alt text](http_monitor_schema.jpg)
 
